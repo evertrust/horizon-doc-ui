@@ -33,7 +33,7 @@
   --panel-border-color: var(--color-smoke-90);
   --scrollbar-thumb-color: var(--color-gray-10);
   /* navbar */
-  --navbar-background: var(--color-jet-80);
+  --navbar-background: #0b2236;
   --navbar-font-color: var(--color-white);
   --navbar_hover-background: var(--color-black);
   --navbar-button-background: var(--color-white);
@@ -76,12 +76,12 @@
   --doc-line-height: 1.6;
   --doc-margin: 0 auto;
   --doc-margin--desktop: 0 2rem;
-  --heading-font-color: var(--color-jet-80);
+  --heading-font-color: #5c66d9;
   --heading-font-weight: normal;
   --alt-heading-font-weight: var(--body-font-weight-bold);
   --section-divider-color: var(--panel-border-color);
-  --link-font-color: #1565c0;
-  --link_hover-font-color: #104d92;
+  --link-font-color: #21969a;
+  --link_hover-font-color: #176669;
   --link_unresolved-font-color: var(--important-color);
   --abstract-background: var(--color-smoke-70);
   --abstract-font-color: var(--color-jet-20);
