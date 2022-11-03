@@ -79,12 +79,12 @@
   --doc-line-height: 1.6;
   --doc-margin: 0 auto;
   --doc-margin--desktop: 0 2rem;
-  --heading-font-color: #5c66d9;
+  --heading-font-color: #1b57bb;
   --heading-font-weight: normal;
   --alt-heading-font-weight: var(--body-font-weight-bold);
   --section-divider-color: var(--panel-border-color);
-  --link-font-color: #21969a;
-  --link_hover-font-color: #176669;
+  --link-font-color: #1b57bb;
+  --link_hover-font-color: #0f3169;
   --link_unresolved-font-color: var(--important-color);
   --abstract-background: var(--color-smoke-70);
   --abstract-font-color: var(--color-jet-20);
