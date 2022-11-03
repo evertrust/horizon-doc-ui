@@ -21,7 +21,12 @@ module.exports = (src, previewSrc, previewDest, sink = () => map()) => (done) =>
       merge(compileLayouts(src), registerPartials(src), registerHelpers(src), copyImages(previewSrc, previewDest))
     ),
   ])
-    .then(([baseUiModel, { layouts }]) => [{ ...baseUiModel, env: process.env }, layouts])
+    .then(([baseUiModel, { layouts }]) => {
+      const { asciidoc: { extensions = [] } = {} } = baseUiModel
+      delete baseUiModel.asciidoc
+      extensions.forEach((request) => require(request).register())
+      return [{ ...baseUiModel, env: process.env }, layouts]
+    })
     .then(([baseUiModel, layouts]) =>
       vfs
         .src('**/*.adoc', { base: previewSrc, cwd: previewSrc })
@@ -31,7 +36,6 @@ module.exports = (src, previewSrc, previewDest, sink = () => map()) => (done) =>
             const uiModel = { ...baseUiModel }
             uiModel.page = { ...uiModel.page }
             uiModel.siteRootPath = siteRootPath
-            uiModel.siteRootUrl = path.join(siteRootPath, 'index.html')
             uiModel.uiRootPath = path.join(siteRootPath, '_')
             if (file.stem === '404') {
               uiModel.page = { layout: '404', title: 'Page Not Found' }

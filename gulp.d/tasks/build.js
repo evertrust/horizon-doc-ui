@@ -37,7 +37,7 @@ module.exports = (src, dest, preview) => () => {
       }),
     postcssUrl([
       {
-        filter: '**/~typeface-*/files/*',
+        filter: new RegExp('^src/css/[~][^/]*(?:font|face)[^/]*/.*/files/.+[.](?:ttf|woff2?)$'),
         url: (asset) => {
           const relpath = asset.pathname.substr(1)
           const abspath = require.resolve(relpath)
@@ -49,6 +49,8 @@ module.exports = (src, dest, preview) => () => {
       },
     ]),
     postcssVar({ preserve: preview }),
+    // NOTE to make vars.css available to all top-level stylesheets, use the next line in place of the previous one
+    //postcssVar({ importFrom: path.join(src, 'css', 'vars.css'), preserve: preview }),
     preview ? postcssCalc : () => {},
     autoprefixer,
     preview
@@ -57,6 +59,8 @@ module.exports = (src, dest, preview) => () => {
   ]
 
   return merge(
+    vfs
+      .src('ui.yml', { ...opts, allowEmpty: true }),
     vfs
       .src('js/+([0-9])-*.js', { ...opts, sourcemaps })
       .pipe(uglify())
@@ -97,7 +101,7 @@ module.exports = (src, dest, preview) => () => {
     vfs
       .src('js/vendor/*.min.js', opts)
       .pipe(map((file, enc, next) => next(null, Object.assign(file, { extname: '' }, { extname: '.js' })))),
-    // NOTE use this statement to bundle a JavaScript library that cannot be browserified, like jQuery
+    // NOTE use the next line to bundle a JavaScript library that cannot be browserified, like jQuery
     //vfs.src(require.resolve('<package-name-or-require-path>'), opts).pipe(concat('js/vendor/<library-name>.js')),
     vfs
       .src(['css/site.css', 'css/vendor/*.css'], { ...opts, sourcemaps })
@@ -123,7 +127,8 @@ module.exports = (src, dest, preview) => () => {
     ),
     vfs.src('helpers/*.js', opts),
     vfs.src('layouts/*.hbs', opts),
-    vfs.src('partials/*.hbs', opts)
+    vfs.src('partials/*.hbs', opts),
+    vfs.src('static/**/*[!~]', { ...opts, base: ospath.join(src, 'static'), dot: true })
   ).pipe(vfs.dest(dest, { sourcemaps: sourcemaps && '.' }))
 }
 
