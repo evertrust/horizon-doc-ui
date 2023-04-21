@@ -66,3 +66,16 @@
 .toolbar .edit-this-page a {
   color: var(--toolbar-muted-color);
 }
+
+.pdf-link {
+  color: inherit;
+  background: url(../img/download.svg) no-repeat;
+  background-position: right 0.5rem top 50%;
+  background-size: auto 1em;
+  border: none;
+  outline: none;
+  line-height: inherit;
+  padding: 0.5rem 1.5rem 0.5rem 0.5rem;
+  position: relative;
+  z-index: var(--z-index-page-version-menu);
+}
