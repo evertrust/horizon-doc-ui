@@ -67,7 +67,7 @@
 
   function writeToClipboard (code) {
     var text = code.innerText.replace(TRAILING_SPACE_RX, '')
-    if (code.dataset.lang === 'console' && text.startsWith('$ ')) text = extractCommands(text)
+    if (code.dataset.lang === 'console' && (text.startsWith('$ ') || text.startsWith('# '))) text = extractCommands(text)
     window.navigator.clipboard.writeText(text).then(
       function () {
         this.classList.add('clicked')
