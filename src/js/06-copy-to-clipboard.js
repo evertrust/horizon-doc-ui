@@ -1,7 +1,7 @@
 ;(function () {
   'use strict'
 
-  var CMD_RX = /^\$|# (\S[^\\\n]*(\\\n(?!\$ )[^\\\n]*)*)(?=\n|$)/gm
+  var CMD_RX = /^[\$|#] (\S[^\\\n]*(\\\n(?!\$ )[^\\\n]*)*)(?=\n|$)/gm
   var LINE_CONTINUATION_RX = /( ) *\\\n *|\\\n( ?) */g
   var TRAILING_SPACE_RX = / +$/gm
 
