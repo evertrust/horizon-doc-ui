@@ -53,7 +53,7 @@ jobs:
       - name: bundle-stable - Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ui-bundle
+          name: ui-bundle-stable
           path: build/ui-bundle.zip
 
       - name: bundle-dev
@@ -65,7 +65,7 @@ jobs:
       - name: bundle-dev - Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ui-bundle
+          name: ui-bundle-dev
           path: build/ui-bundle.zip
           retention-days: 1
 
