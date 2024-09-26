@@ -52,8 +52,9 @@ jobs:
 
       - name: bundle-stable - Artifact
         uses: actions/upload-artifact@v4
+        if: github.ref == 'refs/heads/master'
         with:
-          name: ui-bundle-stable
+          name: ui-bundle
           path: build/ui-bundle.zip
 
       - name: bundle-dev
@@ -64,8 +65,9 @@ jobs:
 
       - name: bundle-dev - Artifact
         uses: actions/upload-artifact@v4
+        if: github.ref != 'refs/heads/master'
         with:
-          name: ui-bundle-dev
+          name: ui-bundle
           path: build/ui-bundle.zip
           retention-days: 1
 
