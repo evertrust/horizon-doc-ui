@@ -1,0 +1,93 @@
+name: Build Horizon Documentation UI bundle
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: .cache/npm
+          key: npm
+
+      - name: install
+        run: |
+          npm install --quiet --no-progress --cache=.cache/npm
+
+  verify:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: .cache/npm
+          key: npm
+
+      - name: lint
+        run: |
+          npm install --quiet --no-progress --cache=.cache/npm
+          node_modules/.bin/gulp lint
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [setup, verify]
+    env:
+      GITHUB_RELEASE_URL: https://github.com/${{ github.repository }}/releases/latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: .cache/npm
+          key: npm
+
+      - name: bundle-stable
+        if: github.ref == 'refs/heads/master'
+        run: |
+          npm install --quiet --no-progress --cache=.cache/npm
+          node_modules/.bin/gulp bundle
+
+      - name: bundle-stable - Artifact
+        uses: actions/upload-release-asset@v1
+        if: github.ref == 'refs/heads/master'
+        with:
+          upload_url: ${{ env.GITHUB_RELEASE_URL }}
+          asset_name: ui-bundle
+          asset_path: build/ui-bundle.zip
+          asset_content_type: application/zip
+
+      - name: bundle-dev
+        if: github.ref != 'refs/heads/master'
+        run: |
+          npm install --quiet --no-progress --cache=.cache/npm
+          node_modules/.bin/gulp bundle
+
+      - name: bundle-dev - Artifact
+        uses: actions/upload-artifact@v4
+        if: github.ref != 'refs/heads/master'
+        with:
+          upload_url: ${{ env.GITHUB_RELEASE_URL }}
+          asset_name: ui-bundle
+          asset_path: build/ui-bundle.zip
+          asset_content_type: application/zip
+          retention-days: 1
+
+      - name: pages
+        if: github.ref == 'refs/heads/master'
+        run: |
+          npm install --quiet --no-progress --cache=.cache/npm
+          node_modules/.bin/gulp preview:build
+          rm -rf public/_/{helpers,layouts,partials}
+
+      - name: pages - Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          upload_url: ${{ env.GITHUB_RELEASE_URL }}
+          asset_name: public
+          asset_path: public
