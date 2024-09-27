@@ -3,6 +3,8 @@ name: Build Horizon Documentation UI bundle
 on:
   release:
     types: [published]
+permissions:
+  contents: write
 
 jobs:
   setup:
@@ -47,31 +49,31 @@ jobs:
           path: .cache/npm
           key: npm
 
+      - name: Install Dependencies
+        run: |
+          sudo apt install zip -y
+          sudo apt install gh -y
+
       - name: bundle-stable
         run: |
           npm install --quiet --no-progress --cache=.cache/npm
           node_modules/.bin/gulp bundle
 
       - name: bundle-stable - Artifact
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ env.GITHUB_RELEASE_URL }}
-          asset_name: ui-bundle
-          asset_path: build/ui-bundle.zip
-          asset_content_type: application/zip
+        run: |
+          gh release upload ${{github.event.release.tag_name}} build/ui-bundle.zip
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
 
       - name: pages
         run: |
           npm install --quiet --no-progress --cache=.cache/npm
           node_modules/.bin/gulp preview:build
           rm -rf public/_/{helpers,layouts,partials}
-          sudo apt install zip -y
           zip -r public.zip public
 
       - name: pages - Artifact
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ env.GITHUB_RELEASE_URL }}
-          asset_name: public
-          asset_path: public.zip
-          asset_content_type: application/zip
+        run: |
+          gh release upload ${{github.event.release.tag_name}} public.zip
+        env:
+          GITHUB_TOKEN: ${{ github.TOKEN }}
