@@ -3,7 +3,7 @@ name: Trigger Webhook for building the Documentation
 on:
   push:
     branches:
-      - v*
+      - master
 env:
   REPO_NAME: 'docs.evertrust.fr'
 
