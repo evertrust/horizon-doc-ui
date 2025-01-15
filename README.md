@@ -13,3 +13,6 @@ Then bundle the UI with gulp:
 ```shell
 npx gulp bundle
 ```
+## CI Workflow
+
+The token provided as a secret for the webhook.yml workflow requires write right on **Contents** on the [doc.evertrust.fr](https://github.com/evertrust/docs.evertrust.fr) repository. Via a webhook, it triggers the build and deployment of the documentation.
